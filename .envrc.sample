@@ -1,0 +1,7 @@
+export PYTHONPATH=`pwd`/src
+
+export USERNAME=testuser
+export PASSWORD=testpassword
+export HOST=localhost
+export DATABASE=testdb
+export PORT=3306
