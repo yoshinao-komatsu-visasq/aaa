@@ -1,0 +1,93 @@
+@startuml テーブル構成
+
+hide circle
+
+skinparam linetype ortho
+
+' 記載例:
+' entity "テーブル名" as table_name {
+'   プライマリキー
+'   --
+'   プライマリキー以外
+' }
+
+entity "生徒" as student <<master>> {
+  * ID : number <<generated>>
+  --
+  * 氏名 : string
+  * 性別 : number
+  * 住所 : string
+}
+
+entity "メールアドレス" as email {
+  * ID : number <<generated>>
+  --
+  * メールアドレス : string
+  * 生徒のID : number <<FK>>
+}
+
+entity "担当者" as teacher <<master>> {
+  * ID : number <<generated>>
+  --
+  * 氏名 : string
+}
+
+package クラス関連 <<Rectangle>> {
+
+  entity "クラス" as class <<master>> {
+    * ID : number <<generated>>
+    --
+    * クラス名 : string
+  }
+
+  entity "所属クラス" as studentclass {
+    --
+    * 生徒のID : number
+    * クラスのID : number
+  }
+
+  entity "クラス担当者" as teacherclass {
+    --
+    * 担当者のID : number
+    * クラスのID : number
+  }
+}
+
+package 部活関連 <<Rectangle>> {
+
+  entity "部活" as club <<master>> {
+    * ID : number <<generated>>
+    --
+    * 部活名 : string
+    * 担当者のID : number <<疑似FK>>
+  }
+
+  entity "所属部活" as studentclub {
+    --
+    * 生徒のID : number
+    * 部活のID : number
+  }
+}
+
+' Entity01 }|..|| Entity02 破線
+' Entity03 }o..o| Entity04
+' Entity05 ||--o{ Entity06 実線
+' Entity07 |o--|| Entity08
+
+' 0か1	|o--
+' 1のみ	||--
+' 0以上	}o--
+' 1以上	}|--
+
+student ||--|{ email
+student ||--|| studentclass
+student ||--o{ studentclub
+
+teacher ||--|{ teacherclass
+teacher ||..o| club
+
+class ||--|| studentclass
+class ||--|| teacherclass
+club ||--|| studentclub
+
+@enduml
