@@ -73,7 +73,7 @@ pytest によるテストコードの実行方法については VSCode のマ�
 
 #### サイドバーに テスト が出てこない場合
 
-仮想環境が設定されていない可能性がありますので VSCode のマニュアルを参考に Interpreter を設定します。
+仮想環境が設定されていない可能性がありますので VSCode のマニュアルを参考に Interpreter を設定してください。
 ([Working with Python interpreters](https://code.visualstudio.com/docs/python/environments#_working-with-python-interpreters))
 
 ### Seeder による検証用データのインサート
@@ -89,6 +89,10 @@ pytest によるテストコードの実行方法については VSCode のマ�
 ### テストコードの実行
 
 任意のファイルから疎通確認と同じ方法でテストコードを実行します。
+
+## データベースのテーブル設計
+
+<img width="800" src="https://raw.githubusercontent.com/yoshik159753/sqlalchemy-learning/main/docs/database-table-design/er-diagram.png" alt="テーブル定義"> 
 
 ## ディレクトリ構成
 
