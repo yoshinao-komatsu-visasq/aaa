@@ -73,7 +73,7 @@ pytest によるテストコードの実行方法については VSCode のマ�
 
 #### サイドバーに テスト が出てこない場合
 
-仮想環境が設定されていない可能性がありますので VSCode のマニュアルを参考に Interpreter を設定します。
+仮想環境が設定されていない可能性がありますので VSCode のマニュアルを参考に Interpreter を設定してください。
 ([Working with Python interpreters](https://code.visualstudio.com/docs/python/environments#_working-with-python-interpreters))
 
 ### Seeder による検証用データのインサート
