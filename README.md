@@ -90,6 +90,10 @@ pytest によるテストコードの実行方法については VSCode のマ�
 
 任意のファイルから疎通確認と同じ方法でテストコードを実行します。
 
+## データベースのテーブル設計
+
+<img width="800" src="https://raw.githubusercontent.com/yoshik159753/sqlalchemy-learning/main/docs/database-table-design/er-diagram.png" alt="テーブル定義"> 
+
 ## ディレクトリ構成
 
 ```txt
