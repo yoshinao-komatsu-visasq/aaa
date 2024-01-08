@@ -7,6 +7,8 @@ SQLAlchemy のラーニング用リポジトリです。
 
 VSCode + pytest により画面ポチポチで動かしながら動作を確認していく仕組みです。
 
+<img width="640" src="https://raw.githubusercontent.com/yoshik159753/sqlalchemy-learning/main/docs/images/top-image.png" alt="トップイメージ"> 
+
 ## 検証環境
 
 - **検証環境**: Ubuntu 23.04
