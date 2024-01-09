@@ -5,7 +5,14 @@ ref: https://docs.sqlalchemy.org/en/20/orm/queryguide/relationships.html#relatio
 import pytest
 from sqlalchemy import select
 from sqlalchemy.exc import InvalidRequestError
-from sqlalchemy.orm import Load, contains_eager, joinedload, raiseload, selectinload
+from sqlalchemy.orm import (
+    Load,
+    aliased,
+    contains_eager,
+    joinedload,
+    raiseload,
+    selectinload,
+)
 from sqlalchemy.orm.exc import DetachedInstanceError
 
 from db import Session
@@ -343,3 +350,40 @@ def test_eager_loading_specific_columns():
         with pytest.raises(InvalidRequestError) as e:
             print(f"### student_clazz.student.address[{student_clazz.student.address}]")
         print(f"### ***ERROR*** [{e}]")
+
+
+def test_aliasを使ったjoinとcontains_eagerロード():
+    """
+
+    お試しとして Email -> Student -> Email の Eager ロードを検証する。
+    結果として次のようなレコード群になるため `unique()` が必要となる。
+
+    [student1のeamil1, student1, student1のeamil1]
+    [student1のeamil1, student1, student1のeamil2]
+    [student1のeamil2, student1, student1のeamil1]
+    [student1のeamil2, student1, student1のeamil2]
+
+    ref: https://github.com/sqlalchemy/sqlalchemy/discussions/6876
+    ref: https://docs.sqlalchemy.org/en/20/orm/queryguide/select.html#using-relationship-to-join-between-aliased-targets
+    ref: https://docs.sqlalchemy.org/en/20/orm/internals.html#sqlalchemy.orm.PropComparator.of_type
+    """  # noqa
+    with Session() as session:
+        eamil_alias = aliased(Email)
+        stmt = (
+            select(Email)
+            .outerjoin(Email.student)
+            .outerjoin(Student.emails.of_type(eamil_alias))
+            .options(
+                contains_eager(Email.student).options(
+                    contains_eager(Student.emails.of_type(eamil_alias))
+                )
+            )
+        )
+        result = session.execute(stmt)
+        for email in result.scalars().unique().all():
+            emails = [email.email for email in email.student.emails]
+            print(
+                f"### email.student.id[{email.student.id}]"
+                f" email.student.name[{email.student.name}]"
+                f" email.student.emails[{emails}]"
+            )
