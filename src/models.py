@@ -3,10 +3,17 @@
 ref: https://docs.sqlalchemy.org/en/20/tutorial/orm_related_objects.html
 """  # noqa
 from datetime import datetime
+from typing import TYPE_CHECKING
 
 from sqlalchemy import INTEGER, ForeignKey, String, func
 from sqlalchemy.dialects.mysql import TIMESTAMP
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+
+# 循環インポート対策
+# ref: https://github.com/sqlalchemy/sqlalchemy/discussions/9576
+# ref: https://mypy.readthedocs.io/en/stable/runtime_troubles.html#import-cycles
+if TYPE_CHECKING:
+    from models_club import StudentClub
 
 
 class Base(DeclarativeBase):
@@ -17,6 +24,7 @@ class Student(Base):
     """
     - Email に対しては one-to-many
     - StudentClazz に対しては one-to-one
+    - StudentClub に対しては one-to-many
 
     ref: https://docs.sqlalchemy.org/en/20/orm/basic_relationships.html#one-to-many
     ref: https://docs.sqlalchemy.org/en/20/orm/basic_relationships.html#one-to-one
@@ -45,6 +53,8 @@ class Student(Base):
     # NOTE: Imperative な場合に one-to-one 制約を付与する場合は
     #       親側の relationship に `uselist=False` を付与する
     # Classic Style: clazz = relationship("Clazz", uselist=False, back_populates="student")  # noqa
+
+    clubs: Mapped[list["StudentClub"]] = relationship()
 
     # 楽観的ロックの検証用。システム的に updated_at を更新するため version_id_generator は False となる
     __mapper_args__ = {"version_id_col": updated_at, "version_id_generator": False}
@@ -81,14 +91,6 @@ class Clazz(Base):
     name: Mapped[str] = mapped_column(String(255), nullable=False)
 
 
-class Club(Base):
-    __tablename__ = "clubs"
-
-    id: Mapped[int] = mapped_column(INTEGER, primary_key=True)
-    name: Mapped[str] = mapped_column(String(255), nullable=False)
-    teacher_id: Mapped[int] = mapped_column(INTEGER, nullable=True)
-
-
 class StudentClazz(Base):
     """
     - Student に対して one-to-one
@@ -122,16 +124,3 @@ class TeacherClazz(Base):
     )
 
     __mapper_args__ = {"primary_key": [teacher_id, class_id]}
-
-
-class StudentClub(Base):
-    __tablename__ = "student_club"
-
-    student_id: Mapped[int] = mapped_column(
-        INTEGER, ForeignKey("students.id", ondelete="CASCADE")
-    )
-    club_id: Mapped[int] = mapped_column(
-        INTEGER, ForeignKey("clubs.id", ondelete="RESTRICT")
-    )
-
-    __mapper_args__ = {"primary_key": [student_id, club_id]}
