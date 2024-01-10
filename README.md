@@ -126,6 +126,7 @@ setup/teardown によるデータのリセットなどは実装していませ�
     |-- 04_relationships_tips.py
     |-- 05_other_tips.py
     |-- db.py
+    |-- models_club.py
     |-- models.py
     `-- seeder.py
 ```
@@ -137,4 +138,5 @@ setup/teardown によるデータのリセットなどは実装していませ�
 - `src/05_other_tips.py`: その他の upsert, session について, 悲観/楽観的ロック などについてです
 - `src/db.py`: データベースへの接続です
 - `src/models.py`: 検証用のモデル群です
+- `src/models_club.py`: 検証用のモデル群です。循環インポートの検証用に別ファイルとしています
 - `src/seeder.py`: 検証用のデータをインサートする seeder です

@@ -4,7 +4,8 @@ from sqlalchemy.exc import MultipleResultsFound, NoResultFound
 from sqlalchemy.orm import aliased
 
 from db import Session
-from models import Clazz, Student, StudentClazz, StudentClub
+from models import Clazz, Student, StudentClazz
+from models_club import StudentClub
 
 
 def test_basic_usage():
