@@ -1,7 +1,8 @@
 from sqlalchemy import and_, between, func, not_, null, or_, select
 
 from db import Session
-from models import Club, Student, StudentClazz, StudentClub
+from models import Student, StudentClazz
+from models_club import Club, StudentClub
 
 
 def test_logical_groping():

@@ -6,17 +6,8 @@ from faker import Faker
 from sqlalchemy import insert, select
 
 from db import Session, engine
-from models import (
-    Base,
-    Clazz,
-    Club,
-    Email,
-    Student,
-    StudentClazz,
-    StudentClub,
-    Teacher,
-    TeacherClazz,
-)
+from models import Base, Clazz, Email, Student, StudentClazz, Teacher, TeacherClazz
+from models_club import Club, StudentClub
 
 faker = Faker(["ja-JP"])
 
