@@ -7,6 +7,7 @@ from sqlalchemy.dialects.mysql import insert
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm.exc import StaleDataError
 
+import models_club  # noqa
 from db import Session
 from models import Student
 
