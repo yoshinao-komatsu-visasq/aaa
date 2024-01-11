@@ -1,6 +1,11 @@
 from faker import Faker
 from sqlalchemy import delete, insert, select, update
 
+# モデルを最初に使おうとするときには、依存するマッピングをすべて取り込むために、依存するモジュールすべてを最初にインポートする必要がある。
+# 循環インポートの場合などでは使うモデルのリレーション先が TYPE_CHECKING によりロードされないケースがありえるため明示的にロードする必要がある。
+# (今回の場合では Student に依存する StudentClub のロードが必要なので models_club を import した)
+# ref: https://github.com/sqlalchemy/sqlalchemy/discussions/10334#discussioncomment-6970773  # noqa
+import models_club  # noqa
 from db import Session
 from models import Student
 

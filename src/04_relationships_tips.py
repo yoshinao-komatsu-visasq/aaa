@@ -15,6 +15,7 @@ from sqlalchemy.orm import (
 )
 from sqlalchemy.orm.exc import DetachedInstanceError
 
+import models_club  # noqa
 from db import Session
 from models import Clazz, Email, Student, StudentClazz
 
