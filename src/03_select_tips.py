@@ -1,7 +1,7 @@
 import pytest
 from sqlalchemy import case, distinct, func, select
 from sqlalchemy.exc import MultipleResultsFound, NoResultFound
-from sqlalchemy.orm import aliased
+from sqlalchemy.orm import aliased, contains_eager
 
 from db import Session
 from models import Clazz, Student, StudentClazz
@@ -303,22 +303,22 @@ def test_join_with_subquery_and_alias():
     """  # noqa
     with Session() as session:
         sub_query = (
-            select(StudentClazz.student_id)
-            .where(StudentClazz.class_id.in_([1, 3, 5]))
-            .subquery()
+            select(StudentClazz).where(StudentClazz.class_id.in_([1, 3, 5])).subquery()
         )
-        student_class_sub_query = aliased(StudentClazz, sub_query, name="student_class")
-        stmt = select(Student.id, Student.name, student_class_sub_query).join(
-            student_class_sub_query
+        student_class_sub_query = aliased(StudentClazz, sub_query)
+        stmt = (
+            select(Student)
+            .join(student_class_sub_query)
+            .options(contains_eager(Student.clazz.of_type(student_class_sub_query)))
         )
         result = session.execute(stmt)
         students = result.all()
-        for id, name, student_class in students:
+        for (student,) in students:
             print(
-                f"### student.id[{id}]"
-                f" student.name[{name}]"
-                f" student_class.student_id[{student_class.student_id}]"
-                f" student_class.class_id[{student_class.class_id}]"
+                f"### student.id[{student.id}]"
+                f" student.name[{student.name}]"
+                f" student_class.student_id[{student.clazz.student_id}]"
+                f" student_class.class_id[{student.clazz.class_id}]"
             )
         print(f"### len(student)[{len(students)}]")
 
